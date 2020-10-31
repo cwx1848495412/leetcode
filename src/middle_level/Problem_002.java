@@ -83,21 +83,68 @@ public class Problem_002 {
         }
     }
 
-    public static void main(String[] args) {
-//        (2 -> 4 -> 3) + (5 -> 6 -> 4)
-        ListNode l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
-        ListNode l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
-        ListNode newListNode = addTwoNumbers(l1, l2);
-        printLinkedList(newListNode);
-
-
-    }
-
     public static void printLinkedList(ListNode listNode) {
         while (listNode != null) {
             System.out.print(listNode.val);
             listNode = listNode.next;
         }
         System.out.println();
+    }
+
+    public static ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        if (l1 == null && l2 == null) {
+            return new ListNode();
+        }
+        int carry = 0;
+        ListNode root = null;
+        ListNode current = null;
+
+        while (l1 != null || l2 != null) {
+            int temp = 0;
+
+            if (l1 == null) {
+                temp = l2.val + carry;
+                l2 = l2.next;
+            } else if (l2 == null) {
+                temp = l1.val + carry;
+                l1 = l1.next;
+            } else {
+                // l1 l2 都有值
+                temp = l1.val + l2.val + carry;
+                l1 = l1.next;
+                l2 = l2.next;
+            }
+
+            if (temp / 10 != 0) {
+                // 说明有进位
+                carry = 1;
+                temp %= 10;
+            } else {
+                carry = 0;
+            }
+
+            if (root == null) {
+                current = root = new ListNode(temp);
+            } else {
+                current.next = new ListNode(temp);
+                current = current.next;
+            }
+
+        }
+
+        if (carry == 1) {
+            current.next = new ListNode(1);
+        }
+
+        return root;
+    }
+
+
+    public static void main(String[] args) {
+//        (2 -> 4 -> 3) + (5 -> 6 -> 4)
+        ListNode l1 = new ListNode(2, new ListNode(4, new ListNode(3)));
+        ListNode l2 = new ListNode(5, new ListNode(6, new ListNode(4)));
+        ListNode newListNode = addTwoNumbers2(l1, l2);
+        printLinkedList(newListNode);
     }
 }
